@@ -44,4 +44,3 @@ fun rating(entireList: List<String>, type: String): Int {
     }
     return Integer.parseInt(list[0], 2)
 }
-
