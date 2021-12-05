@@ -25,7 +25,7 @@ fun part1(input: List<String>): Int {
     val epsilon = (0 until length)
         .joinToString("") { if (onesCount[it] > zerosCount[it]) "0" else "1" }
 
-    return Integer.parseInt(gamma, 2) * Integer.parseInt(epsilon, 2)
+    return gamma.toInt(2) * epsilon.toInt(2)
 }
 
 fun part2(inputparam: List<String>) =
@@ -42,5 +42,5 @@ fun rating(entireList: List<String>, type: String): Int {
 
         if (list.size == 1) break
     }
-    return Integer.parseInt(list[0], 2)
+    return list[0].toInt(2)
 }
