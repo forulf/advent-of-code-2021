@@ -38,16 +38,16 @@ fun partTwo(heightmap: Array<IntArray>): Int {
     }
     return basins
         .map { it.size }
-        .sortedDescending().subList(0, 3)
+        .sortedDescending()
+        .take(3)
         .reduce { acc, value -> acc * value }
 }
 
 data class Point(val row: Int, val col: Int, val value: Int)
 
 fun Array<IntArray>.findBasin(point: Point, points: MutableSet<Point>) {
-    val adjacents = listOfNotNull(
-        left(point), right(point), up(point), down(point), upleft(point), upright(point), downleft(point), downright(point),
-    ).filter { point.value + 1 == it.value && it.value != 9 }
+    val adjacents = listOfNotNull(left(point), right(point), up(point), down(point)
+    ).filter { it.value in (point.value + 1)..8 }
 
     points += adjacents
     for (adjacent in adjacents) {
@@ -55,10 +55,8 @@ fun Array<IntArray>.findBasin(point: Point, points: MutableSet<Point>) {
     }
 }
 
-fun Array<IntArray>.isLowPoint(point: Point): Boolean {
-    val smallestAdjacent = listOfNotNull(left(point), right(point), up(point), down(point)).minByOrNull { it.value }
-    return point.value < smallestAdjacent!!.value
-}
+fun Array<IntArray>.isLowPoint(point: Point): Boolean =
+    point.value < listOfNotNull(left(point), right(point), up(point), down(point)).minOf { it.value }
 
 fun Array<IntArray>.left(point: Point): Point? =
     if (point.col > 0) Point(point.row, point.col - 1, this[point.row][point.col - 1]) else null
@@ -71,15 +69,3 @@ fun Array<IntArray>.up(point: Point): Point? =
 
 fun Array<IntArray>.down(point: Point): Point? =
     if (point.row < this.size - 1) Point(point.row + 1, point.col, this[point.row + 1][point.col]) else null
-
-fun Array<IntArray>.upleft(point: Point): Point? =
-    if ((point.row > 0) && (point.col > 0)) Point(point.row - 1, point.col - 1, this[point.row - 1][point.col - 1]) else null
-
-fun Array<IntArray>.upright(point: Point): Point? =
-    if ((point.row > 0) && (point.col < this[0].size - 1)) Point(point.row - 1, point.col + 1, this[point.row - 1][point.col + 1]) else null
-
-fun Array<IntArray>.downleft(point: Point): Point? =
-    if ((point.row < this.size - 1) && (point.col > 0)) Point(point.row + 1, point.col - 1, this[point.row + 1][point.col - 1]) else null
-
-fun Array<IntArray>.downright(point: Point): Point? =
-    if ((point.row < this.size - 1) && (point.col < this[0].size - 1)) Point(point.row + 1, point.col + 1, this[point.row + 1][point.col + 1]) else null
